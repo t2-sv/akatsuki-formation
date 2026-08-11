@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation en Informatique — L'Akatsuki Code</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Orbitron:wght@600;700&display=swap');
+
+:root{
+  --void:#05070E;
+  --panel:#0A0F1E;
+  --panel-2:#0F1730;
+  --glass:rgba(15,22,45,0.55);
+  --crimson:#FF3B54;
+  --crimson-deep:#B01C33;
+  --cyan:#2FD9FF;
+  --cyan-deep:#0FA8CC;
+  --gold:#FFC857;
+  --text:#EAF0FF;
+  --muted:#8B93B8;
+  --line:rgba(255,255,255,0.09);
+  --font-display:'Space Grotesk', sans-serif;
+  --font-accent:'Orbitron', sans-serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--font-body);
+  background:var(--void);
+  color:var(--text);
+  line-height:1.55;
+  overflow-x:hidden;
+}
+a{color:inherit;}
+.wrap{max-width:1140px; margin:0 auto; padding:0 24px; position:relative;}
+::selection{background:var(--crimson); color:#fff;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001s !important; animation-iteration-count:1 !important; transition-duration:0.001s !important; scroll-behavior:auto !important;}
+}
+
+/* ---------- BOOT SCREEN ---------- */
+#boot{
+  position:fixed; inset:0; z-index:999; background:var(--void);
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  transition:opacity .5s ease, visibility .5s ease;
+}
+#boot.hide{opacity:0; visibility:hidden; pointer-events:none;}
+#boot .boot-mark{font-family:var(--font-accent); color:var(--crimson); font-size:15px; letter-spacing:4px; margin-bottom:18px;}
+#boot .boot-log{font-family:var(--font-mono); color:var(--cyan); font-size:13px; min-height:80px; text-align:left; width:280px;}
+#boot .boot-log div{opacity:0; animation:bootLine .35s ease forwards;}
+#boot .boot-log div:nth-child(1){animation-delay:.1s;}
+#boot .boot-log div:nth-child(2){animation-delay:.4s;}
+#boot .boot-log div:nth-child(3){animation-delay:.7s;}
+#boot .boot-log div:nth-child(4){animation-delay:1.0s; color:var(--gold);}
+@keyframes bootLine{from{opacity:0; transform:translateX(-6px);} to{opacity:1; transform:translateX(0);}}
+#boot .boot-bar{width:280px; height:2px; background:rgba(255,255,255,0.08); margin-top:16px; overflow:hidden; border-radius:2px;}
+#boot .boot-bar span{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--crimson),var(--cyan)); animation:bootFill 1.3s ease forwards;}
+@keyframes bootFill{to{width:100%;}}
+
+/* ---------- SCROLL PROGRESS ---------- */
+#scrollbar{position:fixed; top:0; left:0; height:2px; width:0%; background:linear-gradient(90deg,var(--crimson),var(--cyan)); z-index:200; transition:width .1s linear;}
+
+/* ---------- AMBIENT BACKDROP ---------- */
+.ambient{position:absolute; inset:0; overflow:hidden; pointer-events:none;}
+.cloud{position:absolute; border-radius:50%; filter:blur(60px); opacity:.35; animation:drift 22s ease-in-out infinite;}
+.cloud.c1{width:420px; height:420px; background:var(--crimson); top:-120px; left:-80px; animation-duration:26s;}
+.cloud.c2{width:340px; height:340px; background:var(--cyan); top:60px; right:-100px; animation-duration:19s; animation-delay:-4s;}
+.cloud.c3{width:300px; height:300px; background:var(--crimson-deep); bottom:-140px; left:30%; animation-duration:24s; animation-delay:-9s;}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(30px,-24px) scale(1.08);}}
+.grid-overlay{
+  position:absolute; inset:0;
+  background-image:linear-gradient(rgba(47,217,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(47,217,255,0.05) 1px, transparent 1px);
+  background-size:42px 42px; mask-image:radial-gradient(ellipse at 50% 0%, #000 40%, transparent 78%);
+}
+
+/* ---------- NAV ---------- */
+nav{
+  position:sticky; top:0; z-index:60;
+  background:rgba(5,7,14,0.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{display:flex; align-items:center; justify-content:space-between; height:66px;}
+.logo{font-family:var(--font-mono); color:#fff; font-size:14px; letter-spacing:1px; display:flex; align-items:center; gap:9px;}
+.logo .dot{width:8px;height:8px;border-radius:50%; background:var(--crimson); box-shadow:0 0 12px var(--crimson), 0 0 4px var(--crimson); animation:pulseDot 2s ease-in-out infinite;}
+@keyframes pulseDot{0%,100%{opacity:1;} 50%{opacity:.35;}}
+.nav-cta{
+  position:relative; background:linear-gradient(120deg,var(--crimson),var(--crimson-deep));
+  color:#fff; font-family:var(--font-mono); font-size:13px; font-weight:600;
+  padding:10px 18px; border-radius:7px; border:none; cursor:pointer; text-decoration:none;
+  box-shadow:0 0 0 1px rgba(255,59,84,0.4), 0 6px 20px rgba(255,59,84,0.25);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.nav-cta:hover{transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,59,84,0.6), 0 10px 26px rgba(255,59,84,0.4);}
+
+/* ---------- HERO ---------- */
+header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
+.hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center; position:relative; z-index:2;}
+.eyebrow{
+  font-family:var(--font-accent); color:var(--crimson); font-size:11.5px;
+  letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{content:''; width:26px; height:1px; background:var(--crimson);}
+.hero h1{
+  font-family:var(--font-display); font-size:46px; line-height:1.08; font-weight:700;
+  margin-bottom:18px; letter-spacing:-0.5px;
+}
+.hero h1 .accent{
+  background:linear-gradient(120deg,var(--crimson),var(--gold));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero p.sub{font-size:16.5px; color:var(--muted); max-width:460px; margin-bottom:34px;}
+.hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+.btn-primary{
+  position:relative; background:linear-gradient(120deg,var(--crimson),var(--crimson-deep));
+  color:#fff; font-weight:700; font-size:15px; padding:15px 28px; border-radius:9px; border:none;
+  cursor:pointer; text-decoration:none; display:inline-block; overflow:hidden;
+  box-shadow:0 10px 30px rgba(255,59,84,0.28);
+  transition:transform .18s ease;
+}
+.btn-primary::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform:skewX(-20deg); transition:left .5s ease;
+}
+.btn-primary:hover::after{left:130%;}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{
+  background:transparent; color:var(--text); font-weight:600; font-size:15px;
+  padding:14px 22px; border-radius:9px; border:1px solid var(--line);
+  cursor:pointer; text-decoration:none; display:inline-block; transition:border-color .18s ease, color .18s ease;
+}
+.btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+
+/* TERMINAL */
+.terminal{
+  background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-radius:14px; border:1px solid var(--line); overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(47,217,255,0.06);
+  position:relative;
+}
+.terminal::before{
+  content:''; position:absolute; inset:-1px; border-radius:14px; padding:1px;
+  background:conic-gradient(from var(--ang,0deg), var(--crimson), transparent 25%, var(--cyan) 50%, transparent 75%, var(--crimson));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude; opacity:.55; animation:rotateBorder 6s linear infinite; pointer-events:none;
+}
+@keyframes rotateBorder{to{--ang:360deg;}}
+@property --ang{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
+.term-bar{display:flex; align-items:center; gap:7px; padding:12px 14px; background:rgba(0,0,0,0.35); border-bottom:1px solid var(--line); position:relative; z-index:1;}
+.term-dot{width:10px;height:10px;border-radius:50%;}
+.term-body{padding:20px 22px 24px; font-family:var(--font-mono); font-size:13.5px; color:var(--cyan); min-height:230px; position:relative; z-index:1;}
+.term-line{color:var(--muted); margin-bottom:10px;}
+.term-line b{color:#fff; font-weight:500;}
+.term-list-item{display:flex; justify-content:space-between; color:var(--text); margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
+.term-list-item:nth-child(1){animation-delay:1.3s;} .term-list-item:nth-child(2){animation-delay:1.5s;}
+.term-list-item:nth-child(3){animation-delay:1.7s;} .term-list-item:nth-child(4){animation-delay:1.9s;}
+.term-list-item:nth-child(5){animation-delay:2.1s;}
+@keyframes typeIn{from{opacity:0; transform:translateX(-8px);} to{opacity:1; transform:translateX(0);}}
+.term-list-item .price{color:var(--gold);}
+.cursor{display:inline-block; width:7px; height:14px; background:var(--crimson); vertical-align:text-bottom; animation:blink 1s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+
+/* ---------- SECTIONS ---------- */
+.section{padding:90px 0; position:relative;}
+.section-head{max-width:560px; margin-bottom:48px;}
+.section-eyebrow{font-family:var(--font-accent); font-size:11px; color:var(--cyan); letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;}
+.section h2{font-family:var(--font-display); font-size:32px; font-weight:700; letter-spacing:-0.4px;}
+.section p.lead{color:var(--muted); font-size:15.5px; margin-top:10px;}
+
+.reveal{opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease;}
+.reveal.in-view{opacity:1; transform:translateY(0);}
+
+/* COURSES */
+.courses-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:18px;}
+.course-card{
+  background:var(--glass); backdrop-filter:blur(10px); border:1px solid var(--line); border-radius:14px; padding:24px;
+  cursor:pointer; transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  display:flex; flex-direction:column; gap:14px; position:relative;
+}
+.course-card:hover{transform:translateY(-4px); border-color:rgba(47,217,255,0.5); box-shadow:0 16px 40px rgba(47,217,255,0.12);}
+.course-card.selected{border-color:var(--crimson); box-shadow:0 0 0 1px var(--crimson), 0 16px 40px rgba(255,59,84,0.2);}
+.course-icon{
+  width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,var(--panel-2),var(--panel));
+  border:1px solid var(--line); color:var(--cyan);
+  display:flex; align-items:center; justify-content:center; font-size:19px;
+}
+.course-card h3{font-family:var(--font-display); font-size:17px; font-weight:700;}
+.course-card p{font-size:13.5px; color:var(--muted);}
+.course-foot{display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; border-top:1px dashed var(--line);}
+.course-price{font-family:var(--font-mono); font-weight:600; color:var(--gold); font-size:14.5px;}
+.course-check{
+  width:20px; height:20px; border-radius:5px; border:1.6px solid rgba(255,255,255,0.25);
+  display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff;
+}
+.course-card.selected .course-check{background:var(--crimson); border-color:var(--crimson);}
+
+/* INFO BAR */
+.infobar{
+  background:var(--glass); backdrop-filter:blur(10px); border:1px solid var(--line); border-radius:14px; padding:26px 30px;
+  display:flex; flex-wrap:wrap; gap:20px; align-items:center; justify-content:space-between; margin-top:36px;
+  position:relative; overflow:hidden;
+}
+.infobar-item{display:flex; align-items:center; gap:12px;}
+.infobar-item .ico{font-size:20px;}
+.infobar-item .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-family:var(--font-mono);}
+.infobar-item .val{font-weight:600; font-size:14.5px;}
+.badge-limited{background:rgba(255,59,84,0.12); color:var(--crimson); font-family:var(--font-mono); font-size:12px; padding:7px 13px; border-radius:20px; border:1px solid rgba(255,59,84,0.4); animation:softGlow 2.4s ease-in-out infinite;}
+@keyframes softGlow{0%,100%{box-shadow:0 0 0 rgba(255,59,84,0);} 50%{box-shadow:0 0 14px rgba(255,59,84,0.35);}}
+
+/* TECH MARQUEE */
+.marquee{overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0; margin-top:70px;}
+.marquee-track{display:flex; gap:60px; width:max-content; animation:scrollLeft 18s linear infinite;}
+@keyframes scrollLeft{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+.marquee-item{font-family:var(--font-mono); font-size:14px; color:var(--muted); display:flex; align-items:center; gap:9px; white-space:nowrap;}
+.marquee-item b{color:var(--text);}
+
+/* FORM */
+.form-section{position:relative;}
+.form-card{
+  background:var(--glass); backdrop-filter:blur(16px); border-radius:18px; padding:40px; max-width:780px; margin:0 auto;
+  border:1px solid var(--line); box-shadow:0 40px 80px rgba(0,0,0,0.5); position:relative;
+}
+.form-card h2{font-family:var(--font-display); font-size:26px; margin-bottom:6px;}
+.form-card .form-sub{color:var(--muted); font-size:14.5px; margin-bottom:28px;}
+.field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
+.field{display:flex; flex-direction:column; gap:6px;}
+.field label{font-size:12px; font-weight:600; color:var(--cyan); text-transform:uppercase; letter-spacing:0.6px; font-family:var(--font-mono);}
+.field input, .field select{
+  border:1.6px solid var(--line); border-radius:9px; padding:12px 13px; font-size:14.5px;
+  font-family:var(--font-body); background:rgba(255,255,255,0.03); color:var(--text);
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.field input::placeholder{color:#5A6389;}
+.field input:focus, .field select:focus{outline:none; border-color:var(--cyan); box-shadow:0 0 0 3px rgba(47,217,255,0.14);}
+.selected-summary{
+  background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:11px; padding:16px 18px; margin:22px 0;
+  font-family:var(--font-mono); font-size:13.5px;
+}
+.selected-summary .row{display:flex; justify-content:space-between; padding:4px 0; color:var(--muted);}
+.selected-summary .total{display:flex; justify-content:space-between; padding-top:10px; margin-top:8px; border-top:1px dashed var(--line); font-weight:700; color:var(--gold); font-size:15px;}
+.selected-summary .empty{color:#5A6389; font-style:italic;}
+.submit-btn{
+  width:100%; position:relative; overflow:hidden;
+  background:linear-gradient(120deg,var(--crimson),var(--crimson-deep)); color:#fff; font-weight:700; font-size:15.5px;
+  padding:16px; border-radius:10px; border:none; cursor:pointer; margin-top:6px;
+  box-shadow:0 12px 30px rgba(255,59,84,0.28); transition:transform .18s ease;
+}
+.submit-btn::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%;
+  background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform:skewX(-20deg); transition:left .5s ease;
+}
+.submit-btn:hover:not(:disabled)::after{left:130%;}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);}
+.submit-btn:disabled{opacity:0.55; cursor:not-allowed;}
+.err{color:#FF7A85; font-size:12.5px; margin-top:4px; display:none;}
+.form-msg{font-size:12.5px; color:var(--muted); margin-top:14px; text-align:center;}
+
+/* CONFIRMATION */
+.confirm{display:none; text-align:center; padding:10px 0 4px;}
+.confirm .check-circle{
+  width:60px; height:60px; border-radius:50%; background:radial-gradient(circle, var(--cyan), var(--cyan-deep));
+  color:#04121a; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 18px;
+  box-shadow:0 0 0 0 rgba(47,217,255,0.5); animation:ringPulse 1.6s ease-out infinite;
+}
+@keyframes ringPulse{0%{box-shadow:0 0 0 0 rgba(47,217,255,0.45);} 70%{box-shadow:0 0 0 18px rgba(47,217,255,0);} 100%{box-shadow:0 0 0 0 rgba(47,217,255,0);}}
+.confirm h3{font-family:var(--font-display); font-size:22px; margin-bottom:8px;}
+.confirm p{color:var(--muted); font-size:14.5px; margin-bottom:22px;}
+.confirm-recap{background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:11px; padding:16px 18px; text-align:left; font-size:13.5px; margin-bottom:22px; font-family:var(--font-mono);}
+.confirm-recap div{padding:3px 0;}
+.confirm-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+.btn-whatsapp{
+  background:#25D366; color:#fff; font-weight:700; padding:13px 22px; border-radius:9px;
+  border:none; text-decoration:none; display:inline-flex; align-items:center; gap:8px; font-size:14.5px;
+  box-shadow:0 10px 26px rgba(37,211,102,0.28);
+}
+.btn-secondary{
+  background:transparent; color:var(--text); border:1.6px solid var(--line); font-weight:600;
+  padding:13px 20px; border-radius:9px; cursor:pointer; font-size:14.5px;
+}
+
+/* FOOTER */
+footer{background:var(--panel); border-top:1px solid var(--line); padding:48px 0 28px; position:relative;}
+.footer-grid{display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; padding-bottom:28px; border-bottom:1px solid var(--line);}
+.footer-tagline{font-family:var(--font-display); color:#fff; font-size:19px; font-weight:600; max-width:320px;}
+.contact-list{display:flex; flex-direction:column; gap:8px; font-size:14px; font-family:var(--font-mono); color:var(--muted);}
+.footer-bottom{padding-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12.5px; color:var(--muted);}
+.admin-link{background:none; border:none; color:#4E577C; cursor:pointer; font-size:12px; font-family:var(--font-mono); text-decoration:underline;}
+
+/* ADMIN */
+.admin-panel{display:none; background:var(--panel-2); border-top:3px solid var(--crimson);}
+.admin-panel .wrap{padding:40px 24px;}
+.admin-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;}
+.admin-head h2{font-family:var(--font-display);}
+.admin-stats{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px;}
+.stat-box{background:var(--glass); border:1px solid var(--line); border-radius:11px; padding:16px 20px; min-width:140px;}
+.stat-box .n{font-family:var(--font-mono); font-size:22px; font-weight:700; color:var(--cyan);}
+.stat-box .l{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px;}
+table{width:100%; border-collapse:collapse; background:var(--glass); border-radius:11px; overflow:hidden; font-size:13.5px;}
+th,td{padding:11px 14px; text-align:left; border-bottom:1px solid var(--line);}
+th{background:rgba(255,59,84,0.12); color:var(--text); font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.5px;}
+.admin-actions{display:flex; gap:10px; margin-bottom:16px;}
+.mini-btn{background:var(--crimson); color:#fff; border:none; padding:9px 15px; border-radius:8px; font-size:13px; cursor:pointer;}
+.mini-btn.ghost{background:transparent; color:var(--text); border:1.6px solid var(--line);}
+
+a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--cyan); outline-offset:2px;}
+
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:33px;}
+  .courses-grid{grid-template-columns:1fr 1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .form-card{padding:26px;}
+}
+@media(max-width:560px){
+  .courses-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="boot-mark">AKATSUKI // CODE</div>
+  <div class="boot-log">
+    <div>&gt; init_system.sh --formation</div>
+    <div>&gt; chargement du catalogue...</div>
+    <div>&gt; connexion sécurisée établie</div>
+    <div>&gt; prêt.</div>
+  </div>
+  <div class="boot-bar"><span></span></div>
+</div>
+
+<div id="scrollbar"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>AKATSUKI // CODE</div>
+    <a class="nav-cta" href="#form">S'inscrire</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="ambient">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Spéciale formation en informatique</div>
+      <h1>Des vacances utiles,<br>pour un futur <span class="accent">digital.</span></h1>
+      <p class="sub">L'Akatsuki Code ouvre ses portes du 20 août au 25 septembre 2026. Bureautique, programmation, infographie, cybersécurité — choisis ta formation et réserve ta place dès maintenant.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#form">Réserver ma place</a>
+        <a class="btn-ghost" href="#courses">Voir les formations</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="term-bar">
+        <span class="term-dot" style="background:#FF5F57;"></span>
+        <span class="term-dot" style="background:#FEBC2E;"></span>
+        <span class="term-dot" style="background:#28C840;"></span>
+      </div>
+      <div class="term-body">
+        <div class="term-line">akatsuki@formation:~$ <b>./catalogue.sh</b></div>
+        <div class="term-line">Chargement des formations disponibles...</div>
+        <div class="term-list-item"><span>[1] Initiation à l'informatique</span><span class="price">5 000 F</span></div>
+        <div class="term-list-item"><span>[2] Microsoft Office</span><span class="price">5 000 F</span></div>
+        <div class="term-list-item"><span>[3] Infographie & Montage vidéo</span><span class="price">5 000 F</span></div>
+        <div class="term-list-item"><span>[4] Programmation</span><span class="price">10 000 F</span></div>
+        <div class="term-list-item"><span>[5] Hacking éthique & Cybersécurité</span><span class="price">10 000 F</span></div>
+        <div class="term-line" style="margin-top:14px;">akatsuki@formation:~$ <span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="section reveal" id="courses">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-eyebrow">Catalogue</div>
+      <h2>Cinq formations, une seule adresse</h2>
+      <p class="lead">Clique sur une ou plusieurs formations pour les ajouter à ton inscription — le total se calcule automatiquement plus bas.</p>
+    </div>
+    <div class="courses-grid" id="coursesGrid"></div>
+  </div>
+</section>
+
+<section class="wrap reveal">
+  <div class="infobar">
+    <div class="infobar-item"><span class="ico">📅</span><div><div class="label">Période</div><div class="val">20 août — 25 septembre 2026</div></div></div>
+    <div class="infobar-item"><span class="ico">📍</span><div><div class="label">Équipe</div><div class="val">L'Akatsuki Code</div></div></div>
+    <div class="badge-limited">⚠ Places limitées — réserve vite</div>
+  </div>
+  <div class="marquee">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<section class="section form-section reveal" id="form">
+  <div class="wrap">
+    <div class="form-card">
+
+      <div id="formView">
+        <h2>Formulaire d'inscription</h2>
+        <p class="form-sub">Remplis tes informations, choisis ta ou tes formations, on te recontacte sur WhatsApp pour confirmer ta place.</p>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nom</label>
+            <input type="text" id="nom" placeholder="Ex : Kouassi">
+          </div>
+          <div class="field">
+            <label>Prénom</label>
+            <input type="text" id="prenom" placeholder="Ex : Aya">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Numéro WhatsApp</label>
+            <input type="tel" id="tel" placeholder="Ex : 07 99 40 83 98">
+          </div>
+          <div class="field">
+            <label>Niveau / occupation (optionnel)</label>
+            <input type="text" id="niveau" placeholder="Ex : Élève, étudiant, salarié...">
+          </div>
+        </div>
+        <div class="err" id="formErr"></div>
+
+        <div class="selected-summary" id="summaryBox">
+          <div class="empty">Aucune formation sélectionnée pour le moment.</div>
+        </div>
+
+        <button class="submit-btn" id="submitBtn" onclick="submitForm()">Valider mon inscription</button>
+        <div class="form-msg">Tes informations sont enregistrées et servent uniquement à organiser la formation.</div>
+      </div>
+
+      <div class="confirm" id="confirmView">
+        <div class="check-circle">✓</div>
+        <h3>Inscription enregistrée !</h3>
+        <p>Confirme ta place en un message WhatsApp — l'équipe te répond avec les modalités de paiement et le lieu.</p>
+        <div class="confirm-recap" id="confirmRecap"></div>
+        <div class="confirm-actions">
+          <a class="btn-whatsapp" id="waLink" href="#" target="_blank">💬 Confirmer sur WhatsApp</a>
+          <button class="btn-secondary" onclick="resetForm()">Nouvelle inscription</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-tagline">Transforme tes vacances en opportunité !</div>
+      <div class="contact-list">
+        <div>📞 +225 05 95 50 54 02</div>
+        <div>📞 +225 07 99 40 83 98</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 L'Akatsuki Code — Les meilleurs rejoignent l'Akatsuki.</span>
+      <button class="admin-link" onclick="toggleAdmin()">Espace organisateur</button>
+    </div>
+  </div>
+</footer>
+
+<div class="admin-panel" id="adminPanel">
+  <div class="wrap">
+    <div class="admin-head">
+      <h2>Inscriptions reçues</h2>
+      <div class="admin-actions">
+        <button class="mini-btn ghost" onclick="loadAdmin()">🔄 Actualiser</button>
+        <button class="mini-btn" onclick="exportCSV()">⬇ Exporter en CSV</button>
+      </div>
+    </div>
+    <div class="admin-stats" id="adminStats"></div>
+    <div style="overflow-x:auto;">
+      <table id="adminTable">
+        <thead><tr><th>Date</th><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Formations</th><th>Total</th></tr></thead>
+        <tbody id="adminBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Boot screen ---------- */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('boot').classList.add('hide'), 1500);
+});
+document.getElementById('boot').addEventListener('click', () => {
+  document.getElementById('boot').classList.add('hide');
+});
+
+/* ---------- Scroll progress bar ---------- */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  document.getElementById('scrollbar').style.width = pct + '%';
+});
+
+/* ---------- Scroll reveal ---------- */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in-view'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ---------- Tech marquee ---------- */
+const TECH = [
+  {icon:'🐍', label:'Python'},
+  {icon:'🐬', label:'MySQL'},
+  {icon:'🎨', label:'CSS3'},
+  {icon:'🌐', label:'HTML5'},
+  {icon:'⚡', label:'Node.js'},
+  {icon:'🔐', label:'Cybersécurité'},
+];
+const track = document.getElementById('marqueeTrack');
+const doubled = [...TECH, ...TECH];
+track.innerHTML = doubled.map(t => `<div class="marquee-item">${t.icon} <b>${t.label}</b></div>`).join('');
+
+/* ---------- Course catalogue & form logic ---------- */
+const COURSES = [
+  { id:'initiation', icon:'💻', title:"Initiation à l'informatique", desc:"Les bases pour bien démarrer avec un ordinateur.", price:5000 },
+  { id:'office', icon:'📊', title:"Microsoft Office", desc:"Word, Excel et PowerPoint au quotidien.", price:5000 },
+  { id:'infographie', icon:'🎬', title:"Infographie & Montage vidéo", desc:"Créer des visuels et monter des vidéos.", price:5000 },
+  { id:'programmation', icon:'⌨️', title:"Programmation", desc:"Les bases du développement et tes premiers projets.", price:10000 },
+  { id:'hacking', icon:'🛡️', title:"Hacking éthique & Cybersécurité", desc:"Cybersécurité et hacking éthique, dans un cadre légal.", price:10000 },
+];
+
+let selected = new Set();
+
+function fmt(n){ return n.toLocaleString('fr-FR').replace(/,/g,' ') + ' FCFA'; }
+
+function renderCourses(){
+  const grid = document.getElementById('coursesGrid');
+  grid.innerHTML = COURSES.map(c => `
+    <div class="course-card" id="card-${c.id}" onclick="toggleCourse('${c.id}')">
+      <div class="course-icon">${c.icon}</div>
+      <h3>${c.title}</h3>
+      <p>${c.desc}</p>
+      <div class="course-foot">
+        <span class="course-price">${fmt(c.price)}</span>
+        <span class="course-check" id="check-${c.id}"></span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCourse(id){
+  if(selected.has(id)) selected.delete(id); else selected.add(id);
+  const card = document.getElementById('card-'+id);
+  const check = document.getElementById('check-'+id);
+  card.classList.toggle('selected');
+  check.textContent = selected.has(id) ? '✓' : '';
+  renderSummary();
+}
+
+function renderSummary(){
+  const box = document.getElementById('summaryBox');
+  if(selected.size === 0){
+    box.innerHTML = '<div class="empty">Aucune formation sélectionnée pour le moment.</div>';
+    return;
+  }
+  let total = 0;
+  let rows = '';
+  COURSES.forEach(c => {
+    if(selected.has(c.id)){
+      total += c.price;
+      rows += `<div class="row"><span>${c.title}</span><span>${fmt(c.price)}</span></div>`;
+    }
+  });
+  box.innerHTML = rows + `<div class="total"><span>Total</span><span>${fmt(total)}</span></div>`;
+}
+
+function showErr(msg){
+  const e = document.getElementById('formErr');
+  e.textContent = msg;
+  e.style.display = 'block';
+}
+function clearErr(){
+  document.getElementById('formErr').style.display = 'none';
+}
+
+async function submitForm(){
+  clearErr();
+  const nom = document.getElementById('nom').value.trim();
+  const prenom = document.getElementById('prenom').value.trim();
+  const tel = document.getElementById('tel').value.trim();
+  const niveau = document.getElementById('niveau').value.trim();
+
+  if(!nom || !prenom){ showErr('Merci de renseigner ton nom et ton prénom.'); return; }
+  if(!tel || tel.replace(/\D/g,'').length < 8){ showErr('Merci de renseigner un numéro WhatsApp valide.'); return; }
+  if(selected.size === 0){ showErr('Sélectionne au moins une formation.'); return; }
+
+  const chosen = COURSES.filter(c => selected.has(c.id));
+  const total = chosen.reduce((s,c)=>s+c.price,0);
+  const entry = {
+    nom, prenom, tel, niveau,
+    formations: chosen.map(c=>c.title),
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Enregistrement...';
+
+  try{
+    const res = await fetch('/api/registrations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entry)
+    });
+    if(!res.ok){
+      const data = await res.json().catch(()=>({}));
+      throw new Error(data.error || 'Erreur serveur');
+    }
+  }catch(err){
+    console.error('Erreur d\'enregistrement', err);
+    showErr("Une erreur s'est produite pendant l'enregistrement. Réessaie.");
+    btn.disabled = false;
+    btn.textContent = 'Valider mon inscription';
+    return;
+  }
+
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('confirmView').style.display = 'block';
+  document.getElementById('confirmRecap').innerHTML = `
+    <div><b>${prenom} ${nom}</b></div>
+    <div>${tel}</div>
+    <div>${chosen.map(c=>c.title).join(', ')}</div>
+    <div>Total : ${fmt(total)}</div>
+  `;
+
+  const waMsg = encodeURIComponent(
+    `Bonjour, je viens de m'inscrire à la formation Akatsuki Code.\nNom : ${prenom} ${nom}\nFormation(s) : ${chosen.map(c=>c.title).join(', ')}\nTotal : ${fmt(total)}\nJe souhaite confirmer ma place.`
+  );
+  document.getElementById('waLink').href = `https://wa.me/2250595505402?text=${waMsg}`;
+}
+
+function resetForm(){
+  document.getElementById('nom').value = '';
+  document.getElementById('prenom').value = '';
+  document.getElementById('tel').value = '';
+  document.getElementById('niveau').value = '';
+  selected.clear();
+  renderCourses();
+  renderSummary();
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('submitBtn').textContent = 'Valider mon inscription';
+  document.getElementById('formView').style.display = 'block';
+  document.getElementById('confirmView').style.display = 'none';
+}
+
+/* ---------- Admin ---------- */
+let adminOpen = false;
+let adminKey = '';
+
+function toggleAdmin(){
+  if(!adminOpen){
+    const pass = prompt("Mot de passe organisateur :");
+    if(!pass) return;
+    adminKey = pass;
+  }
+  adminOpen = !adminOpen;
+  document.getElementById('adminPanel').style.display = adminOpen ? 'block' : 'none';
+  if(adminOpen) loadAdmin();
+}
+
+let lastEntries = [];
+
+async function loadAdmin(){
+  const body = document.getElementById('adminBody');
+  const stats = document.getElementById('adminStats');
+  body.innerHTML = '<tr><td colspan="6">Chargement...</td></tr>';
+  try{
+    const res = await fetch('/api/registrations', {
+      headers: { 'x-admin-key': adminKey }
+    });
+    if(res.status === 401){
+      alert('Mot de passe incorrect.');
+      adminOpen = false;
+      document.getElementById('adminPanel').style.display = 'none';
+      return;
+    }
+    if(!res.ok) throw new Error('Erreur serveur');
+    const entries = await res.json();
+    lastEntries = entries;
+
+    const total = entries.reduce((s,e)=>s+(e.total||0),0);
+    stats.innerHTML = `
+      <div class="stat-box"><div class="n">${entries.length}</div><div class="l">Inscriptions</div></div>
+      <div class="stat-box"><div class="n">${fmt(total)}</div><div class="l">Revenu attendu</div></div>
+    `;
+
+    body.innerHTML = entries.length ? entries.map(e => `
+      <tr>
+        <td>${new Date(e.date).toLocaleString('fr-FR')}</td>
+        <td>${e.nom}</td>
+        <td>${e.prenom}</td>
+        <td>${e.tel}</td>
+        <td>${(e.formations||[]).join(', ')}</td>
+        <td>${fmt(e.total||0)}</td>
+      </tr>
+    `).join('') : '<tr><td colspan="6">Aucune inscription pour le moment.</td></tr>';
+  }catch(err){
+    console.error(err);
+    body.innerHTML = '<tr><td colspan="6">Erreur de chargement.</td></tr>';
+  }
+}
+
+function exportCSV(){
+  if(!lastEntries.length){ alert('Aucune donnée à exporter.'); return; }
+  let csv = 'Date,Nom,Prenom,Telephone,Formations,Total\n';
+  lastEntries.forEach(e=>{
+    csv += `"${new Date(e.date).toLocaleString('fr-FR')}","${e.nom}","${e.prenom}","${e.tel}","${(e.formations||[]).join(' / ')}","${e.total}"\n`;
+  });
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'inscriptions-akatsuki.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+renderCourses();
+renderSummary();
+</script>
+
+</body>
+</html>
