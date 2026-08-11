@@ -10,6 +10,13 @@
 <meta property="og:image" content="https://akatsuki-formation.onrender.com/og-banner.png">
 <meta property="og:url" content="https://akatsuki-formation.onrender.com">
 <meta property="og:type" content="website">
+<script>
+(function(){
+  var saved = localStorage.getItem('akatsuki-theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  if(theme === 'light') document.documentElement.setAttribute('data-theme','light');
+})();
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Orbitron:wght@600;700&display=swap');
 
@@ -26,10 +33,21 @@
   --text:#EAF0FF;
   --muted:#8B93B8;
   --line:rgba(255,255,255,0.09);
+  --nav-bg:rgba(5,7,14,0.7);
   --font-display:'Space Grotesk', sans-serif;
   --font-accent:'Orbitron', sans-serif;
   --font-body:'Inter', sans-serif;
   --font-mono:'IBM Plex Mono', monospace;
+}
+:root[data-theme="light"]{
+  --void:#F5F3F0;
+  --panel:#FFFFFF;
+  --panel-2:#F0EEEA;
+  --glass:rgba(255,255,255,0.65);
+  --text:#181A22;
+  --muted:#5B5F73;
+  --line:rgba(20,20,30,0.10);
+  --nav-bg:rgba(255,255,255,0.75);
 }
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
@@ -86,11 +104,11 @@ a{color:inherit;}
 /* ---------- NAV ---------- */
 nav{
   position:sticky; top:0; z-index:60;
-  background:rgba(5,7,14,0.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  background:var(--nav-bg,rgba(5,7,14,0.7)); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);
 }
 nav .wrap{display:flex; align-items:center; justify-content:space-between; height:66px;}
-.logo{font-family:var(--font-mono); color:#fff; font-size:14px; letter-spacing:1px; display:flex; align-items:center; gap:9px;}
+.logo{font-family:var(--font-mono); color:var(--text); font-size:14px; letter-spacing:1px; display:flex; align-items:center; gap:9px;}
 .logo .dot{width:8px;height:8px;border-radius:50%; background:var(--crimson); box-shadow:0 0 12px var(--crimson), 0 0 4px var(--crimson); animation:pulseDot 2s ease-in-out infinite;}
 @keyframes pulseDot{0%,100%{opacity:1;} 50%{opacity:.35;}}
 .nav-cta{
@@ -101,6 +119,15 @@ nav .wrap{display:flex; align-items:center; justify-content:space-between; heigh
   transition:transform .18s ease, box-shadow .18s ease;
 }
 .nav-cta:hover{transform:translateY(-2px); box-shadow:0 0 0 1px rgba(255,59,84,0.6), 0 10px 26px rgba(255,59,84,0.4);}
+.theme-toggle{
+  width:38px; height:38px; border-radius:9px; border:1px solid var(--line);
+  background:transparent; color:var(--text); cursor:pointer; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color .18s ease, transform .18s ease;
+  margin-right:10px;
+}
+.theme-toggle:hover{border-color:var(--cyan); transform:translateY(-1px);}
+.nav-right{display:flex; align-items:center;}
 
 /* ---------- HERO ---------- */
 header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
@@ -143,8 +170,8 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 
 /* TERMINAL */
 .terminal{
-  background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-  border-radius:14px; border:1px solid var(--line); overflow:hidden;
+  background:rgba(15,22,45,0.55); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-radius:14px; border:1px solid rgba(255,255,255,0.09); overflow:hidden;
   box-shadow:0 30px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(47,217,255,0.06);
   position:relative;
 }
@@ -156,12 +183,12 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 }
 @keyframes rotateBorder{to{--ang:360deg;}}
 @property --ang{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
-.term-bar{display:flex; align-items:center; gap:7px; padding:12px 14px; background:rgba(0,0,0,0.35); border-bottom:1px solid var(--line); position:relative; z-index:1;}
+.term-bar{display:flex; align-items:center; gap:7px; padding:12px 14px; background:rgba(0,0,0,0.35); border-bottom:1px solid rgba(255,255,255,0.09); position:relative; z-index:1;}
 .term-dot{width:10px;height:10px;border-radius:50%;}
 .term-body{padding:20px 22px 24px; font-family:var(--font-mono); font-size:13.5px; color:var(--cyan); min-height:230px; position:relative; z-index:1;}
-.term-line{color:var(--muted); margin-bottom:10px;}
+.term-line{color:#8B93B8; margin-bottom:10px;}
 .term-line b{color:#fff; font-weight:500;}
-.term-list-item{display:flex; justify-content:space-between; align-items:baseline; gap:12px; color:var(--text); margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
+.term-list-item{display:flex; justify-content:space-between; align-items:baseline; gap:12px; color:#EAF0FF; margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
 .term-list-item span:first-child{flex:1; min-width:0;}
 .term-list-item .price{flex-shrink:0; white-space:nowrap;}
 .term-list-item:nth-child(1){animation-delay:1.3s;} .term-list-item:nth-child(2){animation-delay:1.5s;}
@@ -294,7 +321,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 /* FOOTER */
 footer{background:var(--panel); border-top:1px solid var(--line); padding:48px 0 28px; position:relative;}
 .footer-grid{display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; padding-bottom:28px; border-bottom:1px solid var(--line);}
-.footer-tagline{font-family:var(--font-display); color:#fff; font-size:19px; font-weight:600; max-width:320px;}
+.footer-tagline{font-family:var(--font-display); color:var(--text); font-size:19px; font-weight:600; max-width:320px;}
 .contact-list{display:flex; flex-direction:column; gap:8px; font-size:14px; font-family:var(--font-mono); color:var(--muted);}
 .footer-bottom{padding-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12.5px; color:var(--muted);}
 .admin-link{background:none; border:none; color:#4E577C; cursor:pointer; font-size:12px; font-family:var(--font-mono); text-decoration:underline;}
@@ -367,7 +394,10 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
 <nav>
   <div class="wrap">
     <div class="logo"><span class="dot"></span>AKATSUKI // CODE</div>
-    <a class="nav-cta" href="#form">S'inscrire</a>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Changer de thème" title="Changer de thème">🌙</button>
+      <a class="nav-cta" href="#form">S'inscrire</a>
+    </div>
   </div>
 </nav>
 
@@ -758,6 +788,25 @@ function exportCSV(){
 
 renderCourses();
 renderSummary();
+
+/* ---------- Thème sombre / clair ---------- */
+function updateThemeIcon(){
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  if(isLight){
+    html.removeAttribute('data-theme');
+    localStorage.setItem('akatsuki-theme','dark');
+  }else{
+    html.setAttribute('data-theme','light');
+    localStorage.setItem('akatsuki-theme','light');
+  }
+  updateThemeIcon();
+}
+updateThemeIcon();
 </script>
 
 </body>
