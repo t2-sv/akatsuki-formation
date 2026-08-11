@@ -646,7 +646,7 @@ async function submitForm(){
     }
   }catch(err){
     console.error('Erreur d\'enregistrement', err);
-    showErr("Une erreur s'est produite pendant l'enregistrement. Réessaie.");
+    showErr(err.message || "Une erreur s'est produite pendant l'enregistrement. Réessaie.");
     btn.disabled = false;
     btn.textContent = 'Valider mon inscription';
     return;

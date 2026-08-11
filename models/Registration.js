@@ -4,6 +4,7 @@ const RegistrationSchema = new mongoose.Schema({
   nom: { type: String, required: true, trim: true },
   prenom: { type: String, required: true, trim: true },
   tel: { type: String, required: true, trim: true },
+  telNormalized: { type: String, required: true, index: true },
   niveau: { type: String, trim: true, default: '' },
   formations: {
     type: [String],

@@ -21,6 +21,11 @@ function requireAdmin(req, res, next) {
   next();
 }
 
+// Normalise un numéro pour comparaison (retire espaces, tirets, indicatifs...)
+function normalizeTel(tel){
+  return String(tel || '').replace(/\D/g, '').slice(-10); // garde les 10 derniers chiffres
+}
+
 // POST /api/registrations — créer une inscription (public)
 router.post('/', async (req, res) => {
   try {
@@ -38,12 +43,26 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: `Formation inconnue : ${unknown}` });
     }
 
+    const telNormalized = normalizeTel(tel);
+    if (telNormalized.length < 8) {
+      return res.status(400).json({ error: 'Numéro de téléphone invalide.' });
+    }
+
+    // Empêche une double inscription avec le même numéro
+    const doublon = await Registration.findOne({ telNormalized });
+    if (doublon) {
+      return res.status(409).json({
+        error: `Ce numéro est déjà inscrit (${doublon.prenom} ${doublon.nom}, le ${new Date(doublon.date).toLocaleDateString('fr-FR')}). Si tu veux ajouter une formation ou corriger une info, contacte-nous directement sur WhatsApp.`,
+      });
+    }
+
     const total = formations.reduce((sum, f) => sum + COURSE_PRICES[f], 0);
 
     const entry = await Registration.create({
       nom: nom.trim(),
       prenom: prenom.trim(),
       tel: tel.trim(),
+      telNormalized,
       niveau: (niveau || '').trim(),
       formations,
       total,
