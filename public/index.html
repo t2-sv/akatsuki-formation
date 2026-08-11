@@ -161,7 +161,9 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 .term-body{padding:20px 22px 24px; font-family:var(--font-mono); font-size:13.5px; color:var(--cyan); min-height:230px; position:relative; z-index:1;}
 .term-line{color:var(--muted); margin-bottom:10px;}
 .term-line b{color:#fff; font-weight:500;}
-.term-list-item{display:flex; justify-content:space-between; color:var(--text); margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
+.term-list-item{display:flex; justify-content:space-between; align-items:baseline; gap:12px; color:var(--text); margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
+.term-list-item span:first-child{flex:1; min-width:0;}
+.term-list-item .price{flex-shrink:0; white-space:nowrap;}
 .term-list-item:nth-child(1){animation-delay:1.3s;} .term-list-item:nth-child(2){animation-delay:1.5s;}
 .term-list-item:nth-child(3){animation-delay:1.7s;} .term-list-item:nth-child(4){animation-delay:1.9s;}
 .term-list-item:nth-child(5){animation-delay:2.1s;}
@@ -325,6 +327,21 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
 @media(max-width:560px){
   .courses-grid{grid-template-columns:1fr;}
   .footer-bottom{flex-direction:column;}
+  .term-body{font-size:12px; padding:16px 16px 20px;}
+  .term-list-item{padding-left:0; font-size:12px;}
+  .hero{padding:56px 0 64px;}
+  .hero h1{font-size:28px;}
+  .section{padding:60px 0;}
+  .section h2{font-size:26px;}
+  .form-card{padding:20px;}
+
+  /* Espace organisateur : tableau -> cartes empilées sur mobile */
+  #adminTable thead{display:none;}
+  #adminTable, #adminTable tbody, #adminTable tr, #adminTable td{display:block; width:100%;}
+  #adminTable tr{margin-bottom:14px; border:1px solid var(--line); border-radius:11px; overflow:hidden; background:var(--glass);}
+  #adminTable td{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; text-align:right; padding:10px 14px; border-bottom:1px solid var(--line);}
+  #adminTable td:last-child{border-bottom:none;}
+  #adminTable td::before{content:attr(data-label); font-family:var(--font-mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; text-align:left; flex-shrink:0;}
 }
 </style>
 </head>
@@ -707,12 +724,12 @@ async function loadAdmin(){
 
     body.innerHTML = entries.length ? entries.map(e => `
       <tr>
-        <td>${new Date(e.date).toLocaleString('fr-FR')}</td>
-        <td>${e.nom}</td>
-        <td>${e.prenom}</td>
-        <td>${e.tel}</td>
-        <td>${(e.formations||[]).join(', ')}</td>
-        <td>${fmt(e.total||0)}</td>
+        <td data-label="Date">${new Date(e.date).toLocaleString('fr-FR')}</td>
+        <td data-label="Nom">${e.nom}</td>
+        <td data-label="Prénom">${e.prenom}</td>
+        <td data-label="Téléphone">${e.tel}</td>
+        <td data-label="Formations">${(e.formations||[]).join(', ')}</td>
+        <td data-label="Total">${fmt(e.total||0)}</td>
       </tr>
     `).join('') : '<tr><td colspan="6">Aucune inscription pour le moment.</td></tr>';
   }catch(err){
