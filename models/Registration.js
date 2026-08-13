@@ -12,6 +12,7 @@ const RegistrationSchema = new mongoose.Schema({
     validate: (v) => Array.isArray(v) && v.length > 0,
   },
   total: { type: Number, required: true, min: 0 },
+  paid: { type: Boolean, default: false },
   date: { type: Date, default: Date.now },
 });
 

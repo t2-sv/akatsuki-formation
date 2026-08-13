@@ -44,6 +44,11 @@
   --panel:#FFFFFF;
   --panel-2:#F0EEEA;
   --glass:rgba(255,255,255,0.65);
+  --crimson:#D81B39;
+  --crimson-deep:#A81528;
+  --cyan:#0C8EAE;
+  --cyan-deep:#0A7189;
+  --gold:#A9700D;
   --text:#181A22;
   --muted:#5B5F73;
   --line:rgba(20,20,30,0.10);
@@ -185,7 +190,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 @property --ang{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
 .term-bar{display:flex; align-items:center; gap:7px; padding:12px 14px; background:rgba(0,0,0,0.35); border-bottom:1px solid rgba(255,255,255,0.09); position:relative; z-index:1;}
 .term-dot{width:10px;height:10px;border-radius:50%;}
-.term-body{padding:20px 22px 24px; font-family:var(--font-mono); font-size:13.5px; color:var(--cyan); min-height:230px; position:relative; z-index:1;}
+.term-body{padding:20px 22px 24px; font-family:var(--font-mono); font-size:13.5px; color:#2FD9FF; min-height:230px; position:relative; z-index:1;}
 .term-line{color:#8B93B8; margin-bottom:10px;}
 .term-line b{color:#fff; font-weight:500;}
 .term-list-item{display:flex; justify-content:space-between; align-items:baseline; gap:12px; color:#EAF0FF; margin-bottom:8px; padding-left:14px; opacity:0; animation:typeIn .4s ease forwards;}
@@ -195,7 +200,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 .term-list-item:nth-child(3){animation-delay:1.7s;} .term-list-item:nth-child(4){animation-delay:1.9s;}
 .term-list-item:nth-child(5){animation-delay:2.1s;}
 @keyframes typeIn{from{opacity:0; transform:translateX(-8px);} to{opacity:1; transform:translateX(0);}}
-.term-list-item .price{color:var(--gold);}
+.term-list-item .price{color:#FFC857;}
 .cursor{display:inline-block; width:7px; height:14px; background:var(--crimson); vertical-align:text-bottom; animation:blink 1s step-end infinite;}
 @keyframes blink{50%{opacity:0;}}
 
@@ -223,6 +228,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
   border:1px solid var(--line); color:var(--cyan);
   display:flex; align-items:center; justify-content:center; font-size:19px;
 }
+.course-icon svg{width:22px; height:22px;}
 .course-card h3{font-family:var(--font-display); font-size:17px; font-weight:700;}
 .course-card p{font-size:13.5px; color:var(--muted);}
 .course-foot{display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:8px; border-top:1px dashed var(--line);}
@@ -240,7 +246,8 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
   position:relative; overflow:hidden;
 }
 .infobar-item{display:flex; align-items:center; gap:12px;}
-.infobar-item .ico{font-size:20px;}
+.infobar-item .ico{width:20px; height:20px; color:var(--cyan); flex-shrink:0;}
+.infobar-item .ico svg{width:100%; height:100%;}
 .infobar-item .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-family:var(--font-mono);}
 .infobar-item .val{font-weight:600; font-size:14.5px;}
 .badge-limited{background:rgba(255,59,84,0.12); color:var(--crimson); font-family:var(--font-mono); font-size:12px; padding:7px 13px; border-radius:20px; border:1px solid rgba(255,59,84,0.4); animation:softGlow 2.4s ease-in-out infinite;}
@@ -251,6 +258,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 .marquee-track{display:flex; gap:60px; width:max-content; animation:scrollLeft 18s linear infinite;}
 @keyframes scrollLeft{from{transform:translateX(0);} to{transform:translateX(-50%);}}
 .marquee-item{font-family:var(--font-mono); font-size:14px; color:var(--muted); display:flex; align-items:center; gap:9px; white-space:nowrap;}
+.marquee-item svg{width:17px; height:17px; color:var(--cyan); flex-shrink:0;}
 .marquee-item b{color:var(--text);}
 
 /* FORM */
@@ -307,15 +315,27 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 .confirm p{color:var(--muted); font-size:14.5px; margin-bottom:22px;}
 .confirm-recap{background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:11px; padding:16px 18px; text-align:left; font-size:13.5px; margin-bottom:22px; font-family:var(--font-mono);}
 .confirm-recap div{padding:3px 0;}
-.confirm-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+.confirm-actions{display:flex; flex-direction:column; gap:12px; align-items:stretch; max-width:340px; margin:0 auto;}
+.pay-step{display:flex; align-items:center; gap:10px; text-align:left; margin-bottom:4px;}
+.pay-step .num{
+  width:22px; height:22px; border-radius:50%; background:var(--panel-2); border:1px solid var(--line);
+  color:var(--text); font-family:var(--font-mono); font-size:12px; font-weight:600;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.pay-step .txt{font-size:13px; color:var(--muted);}
+.btn-wave{
+  background:linear-gradient(120deg,#1AA7EC,#0E7FBF); color:#fff; font-weight:700; padding:13px 22px; border-radius:9px;
+  border:none; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:14.5px;
+  box-shadow:0 10px 26px rgba(26,167,236,0.3);
+}
 .btn-whatsapp{
   background:#25D366; color:#fff; font-weight:700; padding:13px 22px; border-radius:9px;
-  border:none; text-decoration:none; display:inline-flex; align-items:center; gap:8px; font-size:14.5px;
+  border:none; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-size:14.5px;
   box-shadow:0 10px 26px rgba(37,211,102,0.28);
 }
 .btn-secondary{
   background:transparent; color:var(--text); border:1.6px solid var(--line); font-weight:600;
-  padding:13px 20px; border-radius:9px; cursor:pointer; font-size:14.5px;
+  padding:13px 20px; border-radius:9px; cursor:pointer; font-size:14.5px; margin-top:6px;
 }
 
 /* FOOTER */
@@ -341,6 +361,13 @@ th{background:rgba(255,59,84,0.12); color:var(--text); font-family:var(--font-mo
 .admin-actions{display:flex; gap:10px; margin-bottom:16px;}
 .mini-btn{background:var(--crimson); color:#fff; border:none; padding:9px 15px; border-radius:8px; font-size:13px; cursor:pointer;}
 .mini-btn.ghost{background:transparent; color:var(--text); border:1.6px solid var(--line);}
+.status-btn{
+  font-family:var(--font-mono); font-size:11.5px; font-weight:600; padding:6px 11px; border-radius:20px;
+  border:1px solid rgba(255,59,84,0.4); background:rgba(255,59,84,0.1); color:var(--crimson); cursor:pointer;
+  white-space:nowrap; transition:transform .15s ease;
+}
+.status-btn:hover{transform:translateY(-1px);}
+.status-btn.is-paid{border-color:rgba(31,158,133,0.5); background:rgba(31,158,133,0.12); color:var(--teal, #1F9E85);}
 
 a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--cyan); outline-offset:2px;}
 
@@ -451,9 +478,9 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
 
 <section class="wrap reveal">
   <div class="infobar">
-    <div class="infobar-item"><span class="ico">📅</span><div><div class="label">Période</div><div class="val">20 août — 25 septembre 2026</div></div></div>
-    <div class="infobar-item"><span class="ico">📍</span><div><div class="label">Équipe</div><div class="val">L'Akatsuki Code</div></div></div>
-    <div class="badge-limited">⚠ Places limitées — réserve vite</div>
+    <div class="infobar-item"><span class="ico" id="icoCalendar"></span><div><div class="label">Période</div><div class="val">20 août — 25 septembre 2026</div></div></div>
+    <div class="infobar-item"><span class="ico" id="icoPin"></span><div><div class="label">Équipe</div><div class="val">L'Akatsuki Code</div></div></div>
+    <div class="badge-limited"><span id="icoWarning" style="display:inline-flex; vertical-align:-3px; width:14px; margin-right:4px;"></span>Places limitées — réserve vite</div>
   </div>
   <div class="marquee">
     <div class="marquee-track" id="marqueeTrack"></div>
@@ -501,10 +528,13 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
       <div class="confirm" id="confirmView">
         <div class="check-circle">✓</div>
         <h3>Inscription enregistrée !</h3>
-        <p>Confirme ta place en un message WhatsApp — l'équipe te répond avec les modalités de paiement et le lieu.</p>
+        <p>Plus que deux étapes pour valider définitivement ta place.</p>
         <div class="confirm-recap" id="confirmRecap"></div>
         <div class="confirm-actions">
-          <a class="btn-whatsapp" id="waLink" href="#" target="_blank">💬 Confirmer sur WhatsApp</a>
+          <div class="pay-step"><span class="num">1</span><span class="txt">Paye le montant total via Wave</span></div>
+          <a class="btn-wave" id="waveLink" href="#" target="_blank">💳 Payer avec Wave</a>
+          <div class="pay-step"><span class="num">2</span><span class="txt">Envoie une capture d'écran du reçu Wave sur WhatsApp</span></div>
+          <a class="btn-whatsapp" id="waLink" href="#" target="_blank">💬 Envoyer mon reçu sur WhatsApp</a>
           <button class="btn-secondary" onclick="resetForm()">Nouvelle inscription</button>
         </div>
       </div>
@@ -541,7 +571,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
     <div class="admin-stats" id="adminStats"></div>
     <div style="overflow-x:auto;">
       <table id="adminTable">
-        <thead><tr><th>Date</th><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Formations</th><th>Total</th></tr></thead>
+        <thead><tr><th>Date</th><th>Nom</th><th>Prénom</th><th>Téléphone</th><th>Formations</th><th>Total</th><th>Statut</th></tr></thead>
         <tbody id="adminBody"></tbody>
       </table>
     </div>
@@ -570,26 +600,47 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+/* ---------- Icônes SVG ---------- */
+const ICONS = {
+  laptop: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 19h20"/><path d="M9 19l1-3h4l1 3"/></svg>`,
+  grid: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>`,
+  video: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg>`,
+  code: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6"/><path d="M16 6l6 6-6 6"/></svg>`,
+  shield: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`,
+  calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>`,
+  pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.5 7-12.5A7 7 0 0 0 5 9.5C5 14.5 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.3"/></svg>`,
+  warning: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v4M12 17h.01"/></svg>`,
+  filecode: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-7-6z"/><path d="M13 2v6h6"/><path d="M10 14.5L8.5 16l1.5 1.5M14 14.5l1.5 1.5L14 17.5"/></svg>`,
+  database: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>`,
+  palette: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a9 9 0 1 1 9-9c0 2-1.5 3-3 3h-2a2 2 0 0 0-2 2v1a3 3 0 0 1-3 3z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="12" cy="7.2" r="1"/><circle cx="16.5" cy="10.5" r="1"/></svg>`,
+  hexagon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`,
+};
+
 /* ---------- Tech marquee ---------- */
 const TECH = [
-  {icon:'🐍', label:'Python'},
-  {icon:'🐬', label:'MySQL'},
-  {icon:'🎨', label:'CSS3'},
-  {icon:'🌐', label:'HTML5'},
-  {icon:'⚡', label:'Node.js'},
-  {icon:'🔐', label:'Cybersécurité'},
+  {icon:ICONS.filecode, label:'Python'},
+  {icon:ICONS.database, label:'MySQL'},
+  {icon:ICONS.palette, label:'CSS3'},
+  {icon:ICONS.code, label:'HTML5'},
+  {icon:ICONS.hexagon, label:'Node.js'},
+  {icon:ICONS.lock, label:'Cybersécurité'},
 ];
 const track = document.getElementById('marqueeTrack');
 const doubled = [...TECH, ...TECH];
 track.innerHTML = doubled.map(t => `<div class="marquee-item">${t.icon} <b>${t.label}</b></div>`).join('');
 
+document.getElementById('icoCalendar').innerHTML = ICONS.calendar;
+document.getElementById('icoPin').innerHTML = ICONS.pin;
+document.getElementById('icoWarning').innerHTML = ICONS.warning;
+
 /* ---------- Course catalogue & form logic ---------- */
 const COURSES = [
-  { id:'initiation', icon:'💻', title:"Initiation à l'informatique", desc:"Les bases pour bien démarrer avec un ordinateur.", price:5000 },
-  { id:'office', icon:'📊', title:"Microsoft Office", desc:"Word, Excel et PowerPoint au quotidien.", price:5000 },
-  { id:'infographie', icon:'🎬', title:"Infographie & Montage vidéo", desc:"Créer des visuels et monter des vidéos.", price:5000 },
-  { id:'programmation', icon:'⌨️', title:"Programmation", desc:"Les bases du développement et tes premiers projets.", price:10000 },
-  { id:'hacking', icon:'🛡️', title:"Hacking éthique & Cybersécurité", desc:"Cybersécurité et hacking éthique, dans un cadre légal.", price:10000 },
+  { id:'initiation', icon:ICONS.laptop, title:"Initiation à l'informatique", desc:"Les bases pour bien démarrer avec un ordinateur.", price:5000 },
+  { id:'office', icon:ICONS.grid, title:"Microsoft Office", desc:"Word, Excel et PowerPoint au quotidien.", price:5000 },
+  { id:'infographie', icon:ICONS.video, title:"Infographie & Montage vidéo", desc:"Créer des visuels et monter des vidéos.", price:5000 },
+  { id:'programmation', icon:ICONS.code, title:"Programmation", desc:"Les bases du développement et tes premiers projets.", price:10000 },
+  { id:'hacking', icon:ICONS.shield, title:"Hacking éthique & Cybersécurité", desc:"Cybersécurité et hacking éthique, dans un cadre légal.", price:10000 },
 ];
 
 let selected = new Set();
@@ -695,8 +746,11 @@ async function submitForm(){
     <div>Total : ${fmt(total)}</div>
   `;
 
+  const waveUrl = `https://pay.wave.com/m/M_ci_i0kdosgevu8G/c/ci/?amount=${total}`;
+  document.getElementById('waveLink').href = waveUrl;
+
   const waMsg = encodeURIComponent(
-    `Bonjour, je viens de m'inscrire à la formation Akatsuki Code.\nNom : ${prenom} ${nom}\nFormation(s) : ${chosen.map(c=>c.title).join(', ')}\nTotal : ${fmt(total)}\nJe souhaite confirmer ma place.`
+    `Bonjour, je viens de m'inscrire à la formation Akatsuki Code.\nNom : ${prenom} ${nom}\nFormation(s) : ${chosen.map(c=>c.title).join(', ')}\nTotal : ${fmt(total)}\n\nJoins ici la capture d'écran de mon reçu de paiement Wave pour confirmer ma place 👇`
   );
   document.getElementById('waLink').href = `https://wa.me/2250595505402?text=${waMsg}`;
 }
@@ -735,7 +789,7 @@ let lastEntries = [];
 async function loadAdmin(){
   const body = document.getElementById('adminBody');
   const stats = document.getElementById('adminStats');
-  body.innerHTML = '<tr><td colspan="6">Chargement...</td></tr>';
+  body.innerHTML = '<tr><td colspan="7">Chargement...</td></tr>';
   try{
     const res = await fetch('/api/registrations', {
       headers: { 'x-admin-key': adminKey }
@@ -751,9 +805,11 @@ async function loadAdmin(){
     lastEntries = entries;
 
     const total = entries.reduce((s,e)=>s+(e.total||0),0);
+    const confirme = entries.filter(e=>e.paid).reduce((s,e)=>s+(e.total||0),0);
     stats.innerHTML = `
       <div class="stat-box"><div class="n">${entries.length}</div><div class="l">Inscriptions</div></div>
       <div class="stat-box"><div class="n">${fmt(total)}</div><div class="l">Revenu attendu</div></div>
+      <div class="stat-box"><div class="n">${fmt(confirme)}</div><div class="l">Revenu confirmé</div></div>
     `;
 
     body.innerHTML = entries.length ? entries.map(e => `
@@ -764,19 +820,39 @@ async function loadAdmin(){
         <td data-label="Téléphone">${e.tel}</td>
         <td data-label="Formations">${(e.formations||[]).join(', ')}</td>
         <td data-label="Total">${fmt(e.total||0)}</td>
+        <td data-label="Statut">
+          <button class="status-btn ${e.paid ? 'is-paid' : ''}" onclick="togglePaid('${e._id}', ${!!e.paid})">
+            ${e.paid ? '✓ Payé' : '⏳ En attente'}
+          </button>
+        </td>
       </tr>
-    `).join('') : '<tr><td colspan="6">Aucune inscription pour le moment.</td></tr>';
+    `).join('') : '<tr><td colspan="7">Aucune inscription pour le moment.</td></tr>';
   }catch(err){
     console.error(err);
-    body.innerHTML = '<tr><td colspan="6">Erreur de chargement.</td></tr>';
+    body.innerHTML = '<tr><td colspan="7">Erreur de chargement.</td></tr>';
+  }
+}
+
+async function togglePaid(id, currentlyPaid){
+  try{
+    const res = await fetch(`/api/registrations/${id}/paid`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
+      body: JSON.stringify({ paid: !currentlyPaid })
+    });
+    if(!res.ok) throw new Error('Erreur serveur');
+    loadAdmin();
+  }catch(err){
+    console.error(err);
+    alert("Impossible de mettre à jour le statut. Réessaie.");
   }
 }
 
 function exportCSV(){
   if(!lastEntries.length){ alert('Aucune donnée à exporter.'); return; }
-  let csv = 'Date,Nom,Prenom,Telephone,Formations,Total\n';
+  let csv = 'Date,Nom,Prenom,Telephone,Formations,Total,Statut\n';
   lastEntries.forEach(e=>{
-    csv += `"${new Date(e.date).toLocaleString('fr-FR')}","${e.nom}","${e.prenom}","${e.tel}","${(e.formations||[]).join(' / ')}","${e.total}"\n`;
+    csv += `"${new Date(e.date).toLocaleString('fr-FR')}","${e.nom}","${e.prenom}","${e.tel}","${(e.formations||[]).join(' / ')}","${e.total}","${e.paid ? 'Payé' : 'En attente'}"\n`;
   });
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url = URL.createObjectURL(blob);
@@ -807,6 +883,113 @@ function toggleTheme(){
   updateThemeIcon();
 }
 updateThemeIcon();
+</script>
+
+<script type="module">
+import { animate, stagger, onScroll, utils, svg } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Fait apparaître les enfants d'un conteneur en cascade dès qu'il entre dans l'écran */
+function revealOnScroll(container, selector, opts = {}){
+  if(!container) return;
+  const items = container.querySelectorAll(selector);
+  if(!items.length) return;
+  if(prefersReduced) return; // laisse tout visible, pas d'animation
+
+  utils.set(items, {
+    opacity: 0,
+    translateY: opts.y ?? 24,
+    scale: opts.scale ?? 1
+  });
+
+  animate(items, {
+    opacity: [0, 1],
+    translateY: [opts.y ?? 24, 0],
+    scale: opts.scale ? [opts.scale, 1] : 1,
+    duration: opts.duration ?? 700,
+    delay: stagger(opts.stagger ?? 90),
+    ease: 'outExpo',
+    autoplay: onScroll({
+      target: container,
+      enter: 'bottom-=40 top',
+      repeat: false
+    }),
+    onComplete: () => {
+      // Libère le transform inline pour laisser les effets :hover CSS reprendre la main
+      items.forEach(el => { el.style.transform = ''; });
+    }
+  });
+}
+
+/* Anime le tracé des icônes SVG (comme le logo Anime.js) dès qu'elles entrent dans l'écran */
+function drawIconsOnScroll(container, selector, opts = {}){
+  if(!container) return;
+  const lines = container.querySelectorAll(selector);
+  if(!lines.length) return;
+  if(prefersReduced) return;
+
+  const drawables = svg.createDrawable(lines);
+  utils.set(drawables, { draw: '0 0' });
+
+  animate(drawables, {
+    draw: '0 1',
+    duration: opts.duration ?? 800,
+    delay: stagger(opts.stagger ?? 50, { start: opts.startDelay ?? 150 }),
+    ease: opts.ease ?? 'inOutQuad',
+    autoplay: onScroll({
+      target: container,
+      enter: 'bottom-=40 top',
+      repeat: false
+    })
+  });
+}
+
+/* ---------- Cascade des cartes de formations ---------- */
+revealOnScroll(document.getElementById('coursesGrid'), '.course-card', {
+  y: 30, scale: 0.94, duration: 650, stagger: 90
+});
+drawIconsOnScroll(document.getElementById('coursesGrid'), '.course-icon path, .course-icon polyline, .course-icon rect', {
+  duration: 700, stagger: 40, startDelay: 250
+});
+
+/* ---------- Titre + texte de chaque section ---------- */
+document.querySelectorAll('.section-head').forEach(head => {
+  revealOnScroll(head, '.section-eyebrow, h2, p.lead', { y: 18, duration: 600, stagger: 90 });
+});
+
+/* ---------- Barre d'infos (dates, équipe, badge places limitées) ---------- */
+revealOnScroll(document.querySelector('.infobar'), '.infobar-item, .badge-limited', {
+  y: 16, duration: 550, stagger: 110
+});
+drawIconsOnScroll(document.querySelector('.infobar'), '.infobar-item .ico path, .infobar-item .ico polyline, .infobar-item .ico circle', {
+  duration: 650, stagger: 90, startDelay: 200
+});
+
+/* ---------- Formulaire d'inscription ---------- */
+revealOnScroll(document.getElementById('formView'), ':scope > *', {
+  y: 20, duration: 600, stagger: 70
+});
+
+/* ---------- Footer ---------- */
+revealOnScroll(document.querySelector('.footer-grid'), ':scope > *', {
+  y: 16, duration: 600, stagger: 120
+});
+
+/* ---------- Entrée en scène du hero, juste après le splash screen ---------- */
+if(!prefersReduced){
+  const heroItems = document.querySelectorAll('.hero .eyebrow, .hero h1, .hero p.sub, .hero .hero-actions, .hero .terminal');
+  utils.set(heroItems, { opacity: 0, translateY: 26 });
+  setTimeout(() => {
+    animate(heroItems, {
+      opacity: [0, 1],
+      translateY: [26, 0],
+      duration: 800,
+      delay: stagger(120),
+      ease: 'outExpo'
+    });
+  }, 1400);
+}
 </script>
 
 </body>

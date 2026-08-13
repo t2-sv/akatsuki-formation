@@ -86,4 +86,26 @@ router.get('/', requireAdmin, async (req, res) => {
   }
 });
 
+// PATCH /api/registrations/:id/paid — marquer une inscription payée ou non (protégé)
+router.patch('/:id/paid', requireAdmin, async (req, res) => {
+  try {
+    const { paid } = req.body;
+    if (typeof paid !== 'boolean') {
+      return res.status(400).json({ error: 'Valeur "paid" invalide.' });
+    }
+    const entry = await Registration.findByIdAndUpdate(
+      req.params.id,
+      { paid },
+      { new: true }
+    );
+    if (!entry) {
+      return res.status(404).json({ error: 'Inscription introuvable.' });
+    }
+    res.json(entry);
+  } catch (err) {
+    console.error('Erreur mise à jour du statut de paiement:', err);
+    res.status(500).json({ error: "Une erreur serveur s'est produite." });
+  }
+});
+
 module.exports = router;
