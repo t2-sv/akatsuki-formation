@@ -965,7 +965,7 @@ updateThemeIcon();
 </script>
 
 <script type="module">
-import { animate, stagger, onScroll, utils, svg, createAnimatable, createLayout } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+import { animate, stagger, onScroll, utils, svg, createAnimatable, createLayout, waapi, splitText } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
 
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1054,6 +1054,22 @@ revealOnScroll(document.getElementById('formView'), ':scope > *', {
 revealOnScroll(document.querySelector('.footer-grid'), ':scope > *', {
   y: 16, duration: 600, stagger: 120
 });
+
+/* ---------- Slogan du footer qui ondule, lettre par lettre (WAAPI) ---------- */
+if(!prefersReduced){
+  const tagline = document.querySelector('.footer-tagline');
+  if(tagline){
+    const { chars } = splitText(tagline, { words: true, chars: true });
+    waapi.animate(chars, {
+      translate: '0 -0.35rem',
+      delay: stagger(45),
+      duration: 550,
+      loop: true,
+      alternate: true,
+      ease: 'inOut(2)'
+    });
+  }
+}
 
 /* ---------- Entrée en scène du hero, juste après le splash screen ---------- */
 if(!prefersReduced){
