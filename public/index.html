@@ -224,18 +224,13 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
   position:relative; overflow:hidden;
   border-radius:12px; padding:18px 20px; display:flex; align-items:flex-end;
   font-family:var(--font-display); font-weight:700; font-size:15px; color:#fff;
-  background:linear-gradient(135deg, var(--tile-a), var(--tile-b)) center/cover;
-  background-size:cover; background-position:center;
-}
-#pillars .pillar-item::before{
-  content:''; position:absolute; inset:0; z-index:0;
-  background:
-    linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%),
-    linear-gradient(150deg,
-      color-mix(in srgb, var(--tile-a) 55%, transparent),
-      color-mix(in srgb, var(--tile-b) 60%, transparent));
+  background:linear-gradient(135deg, var(--tile-a), var(--tile-b));
 }
 #pillars .pillar-item span{position:relative; z-index:1;}
+#pillars .pillar-icon{
+  position:absolute; top:-10%; right:-8%; width:65%; height:65%;
+  color:#fff; opacity:.22; pointer-events:none;
+}
 #pillars .pillar-item:nth-child(1){--tile-a:var(--crimson); --tile-b:var(--crimson-deep);}
 #pillars .pillar-item:nth-child(2){--tile-a:var(--cyan); --tile-b:var(--cyan-deep);}
 #pillars .pillar-item:nth-child(3){--tile-a:#8b5cf6; --tile-b:#5b3aa8;}
@@ -401,7 +396,7 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 /* FOOTER */
 footer{background:var(--panel); border-top:1px solid var(--line); padding:48px 0 28px; position:relative;}
 .footer-grid{display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; padding-bottom:28px; border-bottom:1px solid var(--line);}
-.footer-tagline{font-family:var(--font-display); color:var(--text); font-size:19px; font-weight:600; max-width:320px;}
+.footer-tagline{font-family:var(--font-display); color:var(--text); font-size:19px; font-weight:600; max-width:320px; padding-top:6px; overflow:visible;}
 .contact-list{display:flex; flex-direction:column; gap:8px; font-size:14px; font-family:var(--font-mono); color:var(--muted);}
 .footer-bottom{padding-top:20px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:12.5px; color:var(--muted);}
 .admin-link{background:none; border:none; color:#4E577C; cursor:pointer; font-size:12px; font-family:var(--font-mono); text-decoration:underline;}
@@ -534,16 +529,20 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
       <p class="lead">Bureautique, création, code, sécurité — chaque formation s'imbrique dans les autres pour te donner une vraie base polyvalente.</p>
     </div>
     <div class="layout-container" data-grid="1">
-      <div class="pillar-item" style="background-image:url('/images/pillars/bureautique.jpg')">
+      <div class="pillar-item">
+        <img class="pillar-photo" src="/images/pillars/bureautique.jpg" alt="" loading="lazy">
         <span>Bureautique</span>
       </div>
-      <div class="pillar-item" style="background-image:url('/images/pillars/crea-video.jpg')">
+      <div class="pillar-item">
+        <img class="pillar-photo" src="/images/pillars/crea-video.jpg" alt="" loading="lazy">
         <span>Créa & Vidéo</span>
       </div>
-      <div class="pillar-item" style="background-image:url('/images/pillars/code.jpg')">
+      <div class="pillar-item">
+        <img class="pillar-photo" src="/images/pillars/code.jpg" alt="" loading="lazy">
         <span>Code</span>
       </div>
-      <div class="pillar-item" style="background-image:url('/images/pillars/cybersecurite.jpg')">
+      <div class="pillar-item">
+        <img class="pillar-photo" src="/images/pillars/cybersecurite.jpg" alt="" loading="lazy">
         <span>Cybersécurité</span>
       </div>
     </div>
@@ -965,7 +964,7 @@ updateThemeIcon();
 </script>
 
 <script type="module">
-import { animate, stagger, onScroll, utils, svg, createAnimatable, createLayout } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+import { animate, stagger, onScroll, utils, svg, createAnimatable, createLayout, waapi, splitText } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
 
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1144,6 +1143,30 @@ if(pillarsContainer && !prefersReduced){
     });
   }, { threshold: 0.2 });
   pillarsObserver.observe(pillarsContainer);
+}
+
+/* ---------- Slogan du footer : lettres qui sautillent (WAAPI) ---------- */
+const footerTagline = document.querySelector('.footer-tagline');
+if(footerTagline && !prefersReduced){
+  const { chars } = splitText(footerTagline, { words: true, chars: true });
+  let footerAnimStarted = false;
+  const footerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !footerAnimStarted){
+        footerAnimStarted = true;
+        waapi.animate(chars, {
+          translate: '0 -0.4rem',
+          delay: stagger(50),
+          duration: 500,
+          loop: true,
+          alternate: true,
+          ease: 'inOut(2)',
+        });
+        footerObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.4 });
+  footerObserver.observe(footerTagline);
 }
 </script>
 
