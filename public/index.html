@@ -99,6 +99,11 @@ a{color:inherit;}
 .cloud.c1{width:420px; height:420px; background:var(--crimson); top:-120px; left:-80px; animation-duration:26s;}
 .cloud.c2{width:340px; height:340px; background:var(--cyan); top:60px; right:-100px; animation-duration:19s; animation-delay:-4s;}
 .cloud.c3{width:300px; height:300px; background:var(--crimson-deep); bottom:-140px; left:30%; animation-duration:24s; animation-delay:-9s;}
+.cursor-orb{
+  position:absolute; top:50%; left:50%; width:260px; height:260px; margin:-130px 0 0 -130px;
+  border-radius:50%; filter:blur(70px); background:var(--cyan); opacity:0;
+  pointer-events:none; will-change:transform, background-color; transition:opacity .4s ease;
+}
 @keyframes drift{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(30px,-24px) scale(1.08);}}
 .grid-overlay{
   position:absolute; inset:0;
@@ -207,6 +212,63 @@ header.hero{position:relative; padding:76px 0 92px; overflow:hidden;}
 /* ---------- SECTIONS ---------- */
 .section{padding:90px 0; position:relative;}
 .section-head{max-width:560px; margin-bottom:48px;}
+
+/* ---------- PILIERS (grille auto-r\u00e9organisable) ---------- */
+.pillars-section{padding:20px 0 10px;}
+.pillars-head{max-width:560px; margin-bottom:36px;}
+#pillars .layout-container{
+  display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr 1fr;
+  gap:10px; height:280px;
+}
+#pillars .pillar-item{
+  position:relative; overflow:hidden;
+  border-radius:12px; padding:18px 20px; display:flex; align-items:flex-end;
+  font-family:var(--font-display); font-weight:700; font-size:15px; color:#fff;
+  background:linear-gradient(135deg, var(--tile-a), var(--tile-b)) center/cover;
+  background-size:cover; background-position:center;
+}
+#pillars .pillar-item::before{
+  content:''; position:absolute; inset:0; z-index:0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 60%),
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--tile-a) 55%, transparent),
+      color-mix(in srgb, var(--tile-b) 60%, transparent));
+}
+#pillars .pillar-item span{position:relative; z-index:1;}
+#pillars .pillar-item:nth-child(1){--tile-a:var(--crimson); --tile-b:var(--crimson-deep);}
+#pillars .pillar-item:nth-child(2){--tile-a:var(--cyan); --tile-b:var(--cyan-deep);}
+#pillars .pillar-item:nth-child(3){--tile-a:#8b5cf6; --tile-b:#5b3aa8;}
+#pillars .pillar-item:nth-child(4){--tile-a:var(--gold); --tile-b:#B5790E;}
+
+/* grid-1 */
+#pillars [data-grid="1"] .pillar-item:nth-child(1){grid-column:1; grid-row:1 / 3;}
+#pillars [data-grid="1"] .pillar-item:nth-child(2){grid-column:2; grid-row:1;}
+#pillars [data-grid="1"] .pillar-item:nth-child(3){grid-column:1; grid-row:3;}
+#pillars [data-grid="1"] .pillar-item:nth-child(4){grid-column:2; grid-row:2 / 4;}
+
+/* grid-2 */
+#pillars [data-grid="2"]{grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr;}
+#pillars [data-grid="2"] .pillar-item:nth-child(1),
+#pillars [data-grid="2"] .pillar-item:nth-child(4){grid-row:1 / 3;}
+
+/* grid-3 */
+#pillars [data-grid="3"] .pillar-item:nth-child(4){grid-column:1; grid-row:1;}
+#pillars [data-grid="3"] .pillar-item:nth-child(3){grid-column:2; grid-row:1 / 3;}
+#pillars [data-grid="3"] .pillar-item:nth-child(2){grid-column:1; grid-row:2 / 4;}
+#pillars [data-grid="3"] .pillar-item:nth-child(1){grid-column:2; grid-row:3;}
+
+/* grid-4 */
+#pillars [data-grid="4"]{grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr;}
+#pillars [data-grid="4"] .pillar-item:nth-child(1){grid-column:1; grid-row:1;}
+#pillars [data-grid="4"] .pillar-item:nth-child(2){grid-column:1; grid-row:2;}
+#pillars [data-grid="4"] .pillar-item:nth-child(3),
+#pillars [data-grid="4"] .pillar-item:nth-child(4){grid-row:1 / 3;}
+
+@media(max-width:560px){
+  #pillars .layout-container{height:220px;}
+  #pillars .pillar-item{font-size:12.5px; padding:12px 14px;}
+}
 .section-eyebrow{font-family:var(--font-accent); font-size:11px; color:var(--cyan); letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;}
 .section h2{font-family:var(--font-display); font-size:32px; font-weight:700; letter-spacing:-0.4px;}
 .section p.lead{color:var(--muted); font-size:15.5px; margin-top:10px;}
@@ -431,6 +493,7 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
     <div class="cloud c1"></div>
     <div class="cloud c2"></div>
     <div class="cloud c3"></div>
+    <div class="cursor-orb" id="cursorOrb"></div>
     <div class="grid-overlay"></div>
   </div>
   <div class="wrap hero-grid">
@@ -462,6 +525,30 @@ a:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var
     </div>
   </div>
 </header>
+
+<section class="section pillars-section" id="pillars">
+  <div class="wrap">
+    <div class="pillars-head">
+      <div class="section-eyebrow">Le programme</div>
+      <h2>Quatre piliers, un seul parcours</h2>
+      <p class="lead">Bureautique, création, code, sécurité — chaque formation s'imbrique dans les autres pour te donner une vraie base polyvalente.</p>
+    </div>
+    <div class="layout-container" data-grid="1">
+      <div class="pillar-item" style="background-image:url('/images/pillars/bureautique.jpg')">
+        <span>Bureautique</span>
+      </div>
+      <div class="pillar-item" style="background-image:url('/images/pillars/crea-video.jpg')">
+        <span>Créa & Vidéo</span>
+      </div>
+      <div class="pillar-item" style="background-image:url('/images/pillars/code.jpg')">
+        <span>Code</span>
+      </div>
+      <div class="pillar-item" style="background-image:url('/images/pillars/cybersecurite.jpg')">
+        <span>Cybersécurité</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="section" id="courses">
   <div class="wrap">
@@ -878,7 +965,7 @@ updateThemeIcon();
 </script>
 
 <script type="module">
-import { animate, stagger, onScroll, utils, svg } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
+import { animate, stagger, onScroll, utils, svg, createAnimatable, createLayout } from 'https://cdn.jsdelivr.net/npm/animejs/+esm';
 
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -981,6 +1068,82 @@ if(!prefersReduced){
       ease: 'outExpo'
     });
   }, 1400);
+}
+
+/* ---------- Halo qui suit le curseur dans le hero ---------- */
+const heroSection = document.querySelector('.hero');
+const orb = document.getElementById('cursorOrb');
+const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+if(heroSection && orb && hasFinePointer && !prefersReduced){
+  let bounds = heroSection.getBoundingClientRect();
+  const refreshOrbBounds = () => { bounds = heroSection.getBoundingClientRect(); };
+  window.addEventListener('resize', refreshOrbBounds);
+  window.addEventListener('scroll', refreshOrbBounds, { passive: true });
+
+  const cyanRGB = [47, 217, 255];
+  const crimsonRGB = [255, 59, 84];
+
+  const orbAnimatable = createAnimatable(orb, {
+    x: 0,
+    y: 0,
+    backgroundColor: 0,
+    ease: 'outExpo',
+  });
+  orbAnimatable.x(0, 650, 'out(2)');
+  orbAnimatable.y(0, 650, 'out(3)');
+  orbAnimatable.backgroundColor(cyanRGB, 400);
+
+  let orbVisible = false;
+
+  heroSection.addEventListener('mousemove', (e) => {
+    const { width, height, left, top } = bounds;
+    const hw = width / 2;
+    const hh = height / 2;
+    const x = utils.clamp(e.clientX - left - hw, -hw, hw);
+    const y = utils.clamp(e.clientY - top - hh, -hh, hh);
+    const t = utils.clamp((e.clientX - left) / width, 0, 1);
+    const rgb = [
+      Math.round(utils.mapRange(t, 0, 1, cyanRGB[0], crimsonRGB[0])),
+      Math.round(utils.mapRange(t, 0, 1, cyanRGB[1], crimsonRGB[1])),
+      Math.round(utils.mapRange(t, 0, 1, cyanRGB[2], crimsonRGB[2])),
+    ];
+    orbAnimatable.x(x).y(y).backgroundColor(rgb);
+    if(!orbVisible){ orb.style.opacity = '0.4'; orbVisible = true; }
+  });
+
+  heroSection.addEventListener('mouseleave', () => {
+    orb.style.opacity = '0';
+    orbVisible = false;
+  });
+}
+
+/* ---------- Piliers : grille qui se réorganise en continu ---------- */
+const pillarsContainer = document.querySelector('#pillars .layout-container');
+if(pillarsContainer && !prefersReduced){
+  const pillarsLayout = createLayout(pillarsContainer);
+  let gridStep = 0;
+  let pillarsStarted = false;
+  function animatePillars(){
+    return pillarsLayout.update(({ root }) => {
+      root.dataset.grid = (++gridStep % 4) + 1;
+    }, {
+      duration: 1000,
+      delay: stagger(150),
+      onComplete: () => animatePillars(),
+    });
+  }
+  // Démarre la boucle une seule fois, dès que les piliers entrent dans l'écran
+  const pillarsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting && !pillarsStarted){
+        pillarsStarted = true;
+        animatePillars();
+        pillarsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  pillarsObserver.observe(pillarsContainer);
 }
 </script>
 
